@@ -12,7 +12,7 @@ project_id = "project-kaos"
 subscription_id = "kaos_dev_ig_input_eurusd-sub"
 # Number of seconds the subscriber should listen for messages
 timeout = 50.0
-credentials = service_account.Credentials.from_service_account_file('project-kaos-ca46ef0355fc.json')
+credentials = service_account.Credentials.from_service_account_file('project-kaos-b914a5d03700.json')
 
 subscriber = pubsub_v1.SubscriberClient(credentials=credentials)
 # The `subscription_path` method creates a fully qualified identifier

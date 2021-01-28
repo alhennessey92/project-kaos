@@ -106,7 +106,7 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    credentials = service_account.Credentials.from_service_account_file('project-kaos-ca46ef0355fc.json')
+    credentials = service_account.Credentials.from_service_account_file('project-kaos-b914a5d03700.json')
     project_id = "project-kaos"
     topic_id = "kaos_dev_ig_input_eurusd"
 
