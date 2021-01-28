@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kaos-dev-stream-ta-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kaos-dev-stream-ta-worker
+  template:
+    metadata:
+      labels:
+        app: kaos-dev-stream-ta-worker
+    spec:
+      containers:
+      - name: server
+        image: kaos-dev-stream-ta-worker
+        ports:
+        - containerPort: 9092
+        env:
+        - name: PORT
+          value: "9092"
+        resources: {}
+        tty: true
+      restartPolicy: Always
+status: {}   
