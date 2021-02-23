@@ -9,6 +9,7 @@ from trading_ig.lightstreamer import Subscription
 
 from google.cloud import pubsub_v1
 from google.oauth2 import service_account
+from google.cloud import bigquery
 
 
 # A simple function acting as a Subscription listener
@@ -38,7 +39,7 @@ def main():
 
     ig_stream_service = IGStreamService(ig_service)
     ig_session = ig_stream_service.create_session()
-    # Ensure configured account is selected
+    # Ensure configured account is selectedjj
     accounts = ig_session[u"accounts"]
     for account in accounts:
         if account[u"accountId"] == config.acc_number:
@@ -58,7 +59,7 @@ def main():
     # )
     subscription_prices = Subscription(
         mode="MERGE",
-        items=["CHART:CS.D.EURUSD.TODAY.IP:15MINUTE"],
+        items=["CHART:CS.D.EURUSD.TODAY.IP:1MINUTE"],
         fields=["BID_OPEN"]
     )
     # adapter="QUOTE_ADAPTER")
@@ -105,10 +106,10 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    credentials = service_account.Credentials.from_service_account_file('project-kaos-b914a5d03700.json')
+    main()
+    credentials = service_account.Credentials.from_service_account_file('project-kaos-3c01956c9113.json')
     project_id = "project-kaos"
-    topic_id = "kaos_dev_ig_input_eurusd"
+    topic_id = "kaos_dev_ig_eurusd_5min_price_input"
 
     publisher = pubsub_v1.PublisherClient(credentials=credentials)
     topic_path = publisher.topic_path(project_id, topic_id)
@@ -118,14 +119,15 @@ if __name__ == "__main__":
     def get_callback(f, data):
         def callback(f):
             try:
-                print(f.result())
+                print(str(f.result(), 'utf-8'))
+                # print(f.result())
                 futures.pop(data)
             except:  # noqa
                 print("Please handle {} for {}.".format(f.exception(), data))
 
         return callback
 
-    for i in range(10):
+    for i in range(1000):
         data = str(i)
         futures.update({data: None})
         # When you publish a message, the client returns a future.
@@ -133,6 +135,7 @@ if __name__ == "__main__":
         futures[data] = future
         # Publish failures shall be handled in the callback function.
         future.add_done_callback(get_callback(future, data))
+        time.sleep(2)
 
     # Wait for all the publish futures to resolve before exiting.
     while futures:
